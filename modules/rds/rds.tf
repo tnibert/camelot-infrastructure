@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "prod" {
   name       = "prod"
-  subnet_ids = [aws_subnet.prod_private_1.id, aws_subnet.prod_private_2.id]
+  subnet_ids = var.subnet_ids
 }
 
 resource "aws_db_instance" "prod" {
@@ -10,7 +10,7 @@ resource "aws_db_instance" "prod" {
   password                = var.prod_rds_password
   port                    = "5432"
   engine                  = "postgres"
-  engine_version          = "14.9"
+  engine_version          = "18.4"
   instance_class          = var.prod_rds_instance_class
   allocated_storage       = "20"
   storage_encrypted       = false
@@ -25,14 +25,14 @@ resource "aws_db_instance" "prod" {
 
 # RDS Security Group (traffic ECS -> RDS)
 resource "aws_security_group" "rds_prod" {
-  name        = "rds-prod"
-  vpc_id      = aws_vpc.prod.id
+  name   = "rds-prod"
+  vpc_id = var.vpc_id
 
   ingress {
     protocol        = "tcp"
     from_port       = "5432"
     to_port         = "5432"
-    security_groups = [aws_security_group.prod_ecs_backend.id]
+    security_groups = var.security_groups
   }
 
   egress {

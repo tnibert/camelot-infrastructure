@@ -4,7 +4,7 @@ resource "aws_lb" "prod" {
   load_balancer_type = "application"
   internal           = false
   security_groups    = [aws_security_group.prod_lb.id]
-  subnets            = [aws_subnet.prod_public_1.id, aws_subnet.prod_public_2.id]
+  subnets            = var.subnet_ids
 }
 
 # Target group for backend web application
@@ -12,7 +12,7 @@ resource "aws_lb_target_group" "prod_backend" {
   name        = "prod-backend"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.prod.id
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
@@ -43,7 +43,7 @@ resource "aws_lb_listener" "prod_http" {
 resource "aws_security_group" "prod_lb" {
   name        = "prod-lb"
   description = "Controls access to the ALB"
-  vpc_id      = aws_vpc.prod.id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 80

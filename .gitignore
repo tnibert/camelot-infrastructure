@@ -33,6 +33,10 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+.terraform.lock.hcl
+
 .idea/
 .DS_Store
 .env
+
+*~
