@@ -14,7 +14,7 @@ variable "prod_rds_password" {
 
 variable "prod_rds_instance_class" {
   description = "RDS instance type"
-  default     = "db.t2.micro"
+  default     = "db.t3.micro"
 }
 
 variable "vpc_id" {
